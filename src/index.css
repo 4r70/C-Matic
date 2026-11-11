@@ -1,0 +1,55 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    @apply bg-ink-50 text-ink-900 antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  ::selection { background: #bcdaff; }
+  * { scrollbar-width: thin; scrollbar-color: #b5c0d1 transparent; }
+}
+
+@layer components {
+  .card { @apply bg-white rounded-2xl border border-ink-200/70 shadow-soft; }
+  .label { @apply text-xs font-medium text-ink-500; }
+  .input {
+    @apply w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-sm text-ink-900 placeholder:text-ink-400 outline-none transition focus:border-sea-500 focus:shadow-glow;
+  }
+  .num { font-variant-numeric: tabular-nums; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #eaeff6 25%, #f5f8fc 37%, #eaeff6 63%);
+  background-size: 800px 100%;
+  @apply animate-shimmer rounded-md;
+}
+
+.tour-pulse {
+  position: relative;
+  z-index: 40;
+  animation: pulseRing 1.6s ease-out infinite;
+  outline: 2px solid #2f7cf6;
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+.hatch {
+  background-image: repeating-linear-gradient(45deg, rgba(47,124,246,.35) 0 4px, rgba(47,124,246,.12) 4px 8px);
+}
+.hatch-amber {
+  background-image: repeating-linear-gradient(45deg, rgba(245,158,11,.55) 0 4px, rgba(245,158,11,.2) 4px 8px);
+}
+
+.dash-flow { stroke-dasharray: 6 6; animation: dash 1s linear infinite; }
+.dash-flow-slow { stroke-dasharray: 5 7; animation: dash 2.4s linear infinite; }
+
+.paper-shadow { box-shadow: 0 1px 1px rgba(12,31,68,.06), 0 8px 24px rgba(12,31,68,.10); }
+
+@media print { .no-print { display: none !important; } }

@@ -1,0 +1,65 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,jsx}'],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['"Inter Variable"', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        sea: {
+          50: '#eef6ff',
+          100: '#d9eaff',
+          200: '#bcdaff',
+          300: '#8ec2ff',
+          400: '#58a0ff',
+          500: '#2f7cf6',
+          600: '#1a5fdb',
+          700: '#164bb0',
+          800: '#173f8a',
+          900: '#16356b',
+          950: '#0c1f44',
+        },
+        ink: {
+          900: '#0b1b33',
+          700: '#2b3d5b',
+          500: '#5b6b85',
+          400: '#8593aa',
+          300: '#b5c0d1',
+          200: '#dbe2ec',
+          100: '#eaeff6',
+          50: '#f5f8fc',
+        },
+      },
+      boxShadow: {
+        soft: '0 1px 2px rgba(12,31,68,.04), 0 4px 16px rgba(12,31,68,.05)',
+        lift: '0 2px 4px rgba(12,31,68,.05), 0 12px 32px rgba(12,31,68,.10)',
+        glow: '0 0 0 4px rgba(47,124,246,.18)',
+      },
+      keyframes: {
+        rise: { '0%': { opacity: 0, translate: '0 8px' }, '100%': { opacity: 1, translate: '0 0' } },
+        pop: { '0%': { opacity: 0, scale: '.94' }, '100%': { opacity: 1, scale: '1' } },
+        shimmer: { '0%': { backgroundPosition: '-400px 0' }, '100%': { backgroundPosition: '400px 0' } },
+        dash: { to: { strokeDashoffset: -24 } },
+        pulseRing: { '0%': { boxShadow: '0 0 0 0 rgba(47,124,246,.55)' }, '100%': { boxShadow: '0 0 0 14px rgba(47,124,246,0)' } },
+        drawIn: { '0%': { strokeDashoffset: 'var(--len, 400)' }, '100%': { strokeDashoffset: 0 } },
+        floaty: { '0%,100%': { translate: '0 0' }, '50%': { translate: '0 -4px' } },
+        wave: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
+        flash: { '0%': { backgroundColor: 'rgba(16,185,129,.22)' }, '100%': { backgroundColor: 'transparent' } },
+      },
+      animation: {
+        rise: 'rise .4s ease-out both',
+        pop: 'pop .25s ease-out both',
+        shimmer: 'shimmer 1.4s linear infinite',
+        dash: 'dash 1s linear infinite',
+        pulseRing: 'pulseRing 1.6s ease-out infinite',
+        drawIn: 'drawIn .9s ease-out both',
+        floaty: 'floaty 4s ease-in-out infinite',
+        wave: 'wave 14s linear infinite',
+        flash: 'flash 1.4s ease-out both',
+      },
+    },
+  },
+  plugins: [],
+};
