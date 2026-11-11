@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Check, Loader2, X, HelpCircle, Sparkles } from 'lucide-react';
 import { GLOSSARY } from '../data/seed.js';
 import { useStore } from '../store/store.js';
@@ -8,18 +9,8 @@ export const cx = (...a) => a.filter(Boolean).join(' ');
 export function Logo({ size = 32, light = false, tag = false }) {
   return (
     <div className="flex items-center gap-2.5 select-none">
-      <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden>
-        <defs>
-          <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#58a0ff" />
-            <stop offset="1" stopColor="#164bb0" />
-          </linearGradient>
-        </defs>
-        <rect width="64" height="64" rx="16" fill={light ? '#fff' : 'url(#lg)'} />
-        <path d="M44 20a17 17 0 1 0 0 24" fill="none" stroke={light ? '#1a5fdb' : '#fff'} strokeWidth="6" strokeLinecap="round" />
-        <circle cx="31" cy="32" r="4.5" fill={light ? '#1a5fdb' : '#fff'} />
-        <path d="M18 46c4-3 8 3 12 0s8 3 12 0" fill="none" stroke={light ? '#58a0ff' : '#bcdaff'} strokeWidth="2.4" strokeLinecap="round" opacity=".9" />
-      </svg>
+      <img src="/favicon.svg" width={size} height={size} alt="" aria-hidden className="shrink-0 rounded-[24%]" />
+
       <div className="leading-none">
         <div className={cx('text-[17px] font-semibold tracking-tight', light ? 'text-white' : 'text-ink-900')}>C-Matic</div>
         {tag && <div className="text-[10px] text-ink-500 mt-0.5">See your CBAM data clearly</div>}
@@ -59,18 +50,35 @@ export function Button({ variant = 'primary', size = 'md', icon: Icon, iconRight
   return soon ? <Tip text="Coming soon">{btn}</Tip> : btn;
 }
 
+// Floating layer rendered in document.body so it is never trapped under sibling stacking contexts
+function Floating({ anchor, side = 'top', className, children }) {
+  const ref = useRef(null);
+  const [pos, setPos] = useState(null);
+  useLayoutEffect(() => {
+    const a = anchor.getBoundingClientRect();
+    const w = ref.current?.offsetWidth || 0;
+    const h = ref.current?.offsetHeight || 0;
+    const left = Math.min(Math.max(8, a.left + a.width / 2 - w / 2), window.innerWidth - w - 8);
+    let top = side === 'top' ? a.top - h - 8 : a.bottom + 8;
+    if (top < 8) top = a.bottom + 8;
+    if (top + h > window.innerHeight - 8) top = Math.max(8, a.top - h - 8);
+    setPos({ left, top });
+  }, [anchor, side]);
+  return createPortal(
+    <div ref={ref} className={className} style={{ position: 'fixed', zIndex: 1000, left: pos?.left ?? -9999, top: pos?.top ?? -9999 }}>{children}</div>,
+    document.body
+  );
+}
+
 export function Tip({ text, children, side = 'top' }) {
+  const [el, setEl] = useState(null);
+  const [open, setOpen] = useState(false);
   return (
-    <span className="relative inline-flex group/tip">
+    <span ref={setEl} className="inline-flex" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} onFocus={() => setOpen(true)} onBlur={() => setOpen(false)}>
       {children}
-      <span
-        className={cx(
-          'pointer-events-none absolute left-1/2 -translate-x-1/2 z-50 w-max max-w-[240px] rounded-lg bg-ink-900 px-2.5 py-1.5 text-xs font-normal text-white opacity-0 transition group-hover/tip:opacity-100 shadow-lift',
-          side === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'
-        )}
-      >
-        {text}
-      </span>
+      {open && el && (
+        <Floating anchor={el} side={side} className="pointer-events-none w-max max-w-[240px] rounded-lg bg-ink-900 px-2.5 py-1.5 text-xs font-normal text-white shadow-lift animate-pop">{text}</Floating>
+      )}
     </span>
   );
 }
@@ -183,17 +191,18 @@ export function Empty({ icon: Icon, title, text, action }) {
 export function Help({ k, className }) {
   const g = GLOSSARY[k];
   const [open, setOpen] = useState(false);
+  const [el, setEl] = useState(null);
   if (!g) return null;
   return (
-    <span className={cx('relative inline-flex', className)} onMouseLeave={() => setOpen(false)}>
+    <span ref={setEl} className={cx('inline-flex', className)} onMouseLeave={() => setOpen(false)}>
       <button type="button" onMouseEnter={() => setOpen(true)} onClick={() => setOpen((o) => !o)} className="text-ink-400 hover:text-sea-600 transition" aria-label={`What is ${g.term}?`}>
         <HelpCircle className="w-4 h-4" />
       </button>
-      {open && (
-        <span className="absolute z-50 left-1/2 -translate-x-1/2 top-full mt-2 w-64 rounded-xl bg-white border border-ink-200 shadow-lift p-3 text-left animate-pop">
+      {open && el && (
+        <Floating anchor={el} side="bottom" className="w-64 rounded-xl bg-white border border-ink-200 shadow-lift p-3 text-left animate-pop">
           <span className="block text-xs font-semibold text-sea-700 mb-1">{g.term}</span>
           <span className="block text-xs leading-relaxed text-ink-700 font-normal">{g.text}</span>
-        </span>
+        </Floating>
       )}
     </span>
   );

@@ -79,7 +79,6 @@ function TopBar() {
   return (
     <header className="h-14 shrink-0 bg-white/90 backdrop-blur border-b border-ink-200/70 flex items-center gap-3 px-4 z-40 relative no-print">
       <button onClick={() => go('pain')} className="shrink-0" aria-label="Home"><Logo /></button>
-      <div className="hidden xl:block text-xs text-ink-500 border-l border-ink-200 pl-3 ml-1">One producer, one CBAM dataset, many EU importers.</div>
       <div className="flex-1" />
 
       <div data-tour="role-switch" className="flex items-center p-1 rounded-xl bg-ink-100 text-sm">
@@ -98,7 +97,6 @@ function TopBar() {
         </div>
       )}
       <div className="flex-1" />
-      <Badge tone="violet" className="hidden lg:inline-flex">Demo · mocked data</Badge>
       <button data-tour="tour-btn" onClick={() => (tourOpen ? useStore.getState().endTour() : startTour())} className={cx('flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-lg transition', tourOpen ? 'bg-sea-600 text-white' : 'text-sea-700 bg-sea-50 hover:bg-sea-100')}>
         <PlayCircle className="w-4 h-4" /> <span className="hidden sm:inline">{tourOpen ? 'End tour' : 'Start tour'}</span>
       </button>
@@ -148,11 +146,6 @@ function SideNav() {
           </div>
         </div>
       ))}
-      <div className="mt-auto rounded-xl bg-gradient-to-br from-sea-600 to-sea-800 p-4 text-white">
-        <div className="text-xs font-medium text-sea-200">Trust layer</div>
-        <div className="text-sm font-semibold mt-0.5 leading-snug">X-Road for CBAM data</div>
-        <div className="text-[11px] text-sea-200 mt-1.5 leading-relaxed">Estonian-made. Producer-controlled sharing, logged connections.</div>
-      </div>
     </nav>
   );
 }
