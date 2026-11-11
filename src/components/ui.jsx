@@ -9,7 +9,7 @@ export const cx = (...a) => a.filter(Boolean).join(' ');
 export function Logo({ size = 32, light = false, tag = false }) {
   return (
     <div className="flex items-center gap-2.5 select-none">
-      <img src="/favicon.svg" width={size} height={size} alt="" aria-hidden className="shrink-0 rounded-[24%]" />
+      <img src={`${import.meta.env.BASE_URL}favicon.svg`} width={size} height={size} alt="" aria-hidden className="shrink-0 rounded-[24%]" />
 
       <div className="leading-none">
         <div className={cx('text-[17px] font-semibold tracking-tight', light ? 'text-white' : 'text-ink-900')}>C-Matic</div>
